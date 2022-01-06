@@ -1,6 +1,15 @@
 Notion:
-- Read database
+
+~~- Read database~~
+
+
+Google Contacts:
+
+- Lookup all contacts birthday's rather than using notion
+- Google Contacts API
+
 
 Messaging:
-- Whatsapp?
-- SMS?
+- Output of program (message to perosn who's birthday it is)
+- Whatsapp? - whatsapp via python / web bots
+- SMS? - sms via python / web bots
