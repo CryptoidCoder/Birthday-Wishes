@@ -33,10 +33,9 @@ def main(): #main functions for checking for birthdays
 
         if Today == Birthday:
             print(f"{Name}'s Birthday Is Today!")
-            if Message != None: #if message exists include it, else don'use generic
-                print(f"Here is the message: {Message}")
-            else: #use generic message
-                Message = f"Happy Birthday {Name}, Hope You Have A Great Day"
+                
+            if Message == None: #no custom message, using generic
+                Message = f"Happy Birthday {FirstName}, Hope You Have A Great Day"
 
             sendmessage(phonenumber, Message)
 
