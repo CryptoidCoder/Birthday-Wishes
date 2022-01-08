@@ -5,6 +5,7 @@ load_dotenv()
 
 
 from functions import * # import functions file
+
 import datetime #import dates
 import schedule, time # for scheduling
 
@@ -18,9 +19,10 @@ def main(): #main functions for checking for birthdays
     for row in data['results']: #for people in table
         FirstName = getdata(row, ["properties", "First Name", "title", "text", "content"]) #get first  name from title-type column
         SecondName = getdata(row, ["properties", "Second Name", "rich_text", "text", "content"]) #get second name from rich_text type column
-        Name = f"{FirstName} {SecondName}"
+        Name = f"{FirstName} {SecondName}" #combine First & Last name 
         Birthday =  getdata(row, ["properties", "Birthday", "date", "start"]) #get birthday from date-type column
         Message = getdata(row, ["properties", "Message", "rich_text", "text", "content"]) #get message from rich_text type column
+        phonenumber = getdata(row, ["properties", "Phone Number", "rich_text", "text", "content"]) #get phone number from rich_text type column
 
         Birthday = Birthday.split("-") #split into a list
         Birth_Year, Birth_Month, Birth_Day = int(Birthday[0]),int(Birthday[1]),int(Birthday[2]) #first itme is year, second item is month, third item is day
@@ -35,6 +37,8 @@ def main(): #main functions for checking for birthdays
                 print(f"Here is the message: {Message}")
             else: #use generic message
                 Message = f"Happy Birthday {Name}, Hope You Have A Great Day"
+
+            sendmessage(phonenumber, Message)
 
 
 

@@ -1,4 +1,4 @@
-import requests, json
+# Global:
 from dotenv import load_dotenv
 import os
 
@@ -6,6 +6,8 @@ load_dotenv()
 
 
 # Notion:
+import requests, json
+
 token = os.getenv('notion_token')
 databaseId = os.getenv('Birthday-databaseId')
 
@@ -25,59 +27,6 @@ def readDatabase(databaseId): #read a databse and save to file
     
     with open('./db_read.json', 'w', encoding='utf8') as f:
         json.dump(data, f, ensure_ascii=False)
-
-def createrow(newPageData): #create a page in notion
-
-    createUrl = 'https://api.notion.com/v1/pages'
-    
-    headers = {
-    "Authorization": "Bearer " + token,
-    "Content-Type": "application/json",
-    "Notion-Version": "2021-08-16"
-    }
-
-    data = json.dumps(newPageData)
-    #print(newPageData)
-
-    res = requests.request("POST", createUrl, headers=headers, data=data)
-
-    #print(res.status_code)
-    #print(f"Create Row : {res.status_code}")
-
-def archiverow(rowId): #update a page with the archived=True tag in notion
-    updateUrl = f"https://api.notion.com/v1/pages/{rowId}"
-
-    headers = {
-    "Authorization": "Bearer " + token,
-    "Content-Type": "application/json",
-    "Notion-Version": "2021-08-16"
-    }
-
-    deletionData = {
-        "archived": True
-    }
-
-    data = json.dumps(deletionData)
-
-    res = requests.request("PATCH", updateUrl, headers=headers, data=data)
-
-    #print(res.status_code)
-    #print(f"Archived Row ({rowId}): {res.status_code}")
-
-def updaterow(rowId, updateData): #update a page in notion
-    rowId = rowId.replace("-", "") #remove all -
-    updateUrl = f"https://api.notion.com/v1/pages/{rowId}"
-
-    headers = {
-    "Authorization": "Bearer " + token,
-    "Content-Type": "application/json",
-    "Notion-Version": "2021-08-16"
-    }
-
-    data = json.dumps(updateData)
-
-    res = requests.request("PATCH", updateUrl, headers=headers, data=data)
-    return res.status_code
 
 def extract_element_from_json(obj, path): #extract element from data
     '''
@@ -142,3 +91,24 @@ def getdata(dataset, path): #get data from json dataset
             return str(string_data)
         except:
             return None
+
+
+# Whatsapp:
+import pywhatkit #import whatsapp kit
+from datetime import datetime #import datetime for finding out when to send
+
+
+chromedriver_path = os.getenv('chromedriver_path') #specify chrome_driver path
+
+def sendmessage(number, message): #send a message next minute
+    now = datetime.now() #get current time
+    current_hour = now.strftime("%H")# get current hour
+    current_minute = now.strftime("%M") #get current minute
+    next_minute = int(current_minute) + 1 #calculate the next minute
+    #print(f"Now: {now}, Hour: {current_hour}, Minute: {current_minute}, Sending: {next_minute}")
+    
+    try:
+        pywhatkit.sendwhatmsg(number,message, int(current_hour), int(next_minute)) #send message next minute
+    
+    except:
+        print("An Unexpected Error!") #couldn't send message, throwing error
